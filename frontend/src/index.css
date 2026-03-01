@@ -1,0 +1,49 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=DM+Sans:wght@300;400;500;600&family=Playfair+Display:wght@700&display=swap');
+
+:root {
+  --sidebar-bg: #0f1117;
+  --sidebar-border: #1e2130;
+  --sidebar-text: #8892a4;
+  --sidebar-active: #f0c040;
+  --sidebar-hover: #1e2130;
+
+  --content-bg: #f7f8fa;
+  --content-card: #ffffff;
+  --content-border: #e8eaed;
+
+  --text-primary: #0f1117;
+  --text-secondary: #5a6478;
+  --text-muted: #9aa0ad;
+
+  --accent-gold: #f0c040;
+  --accent-green: #22c55e;
+  --accent-red: #ef4444;
+  --accent-blue: #3b82f6;
+
+  --font-mono: 'IBM Plex Mono', monospace;
+  --font-body: 'DM Sans', sans-serif;
+  --font-display: 'Playfair Display', serif;
+
+  --sidebar-width: 240px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--content-bg);
+  color: var(--text-primary);
+  overflow-x: hidden;
+}
+
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 2px; }
+
+.mono { font-family: var(--font-mono); }
+.positive { color: var(--accent-green); }
+.negative { color: var(--accent-red); }
