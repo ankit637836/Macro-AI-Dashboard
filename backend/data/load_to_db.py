@@ -58,7 +58,7 @@ def load_sofr_curve():
                     "rate": float(rate)
                 })
     df_to_insert = pd.DataFrame(rows)
-    df_to_insert.to_sql("sofr_curve", engine, if_exists="append", index=False)
+    df_to_insert.to_sql("sofr_curve", engine, if_exists="replace", index=False)
     print(f"Loaded {len(df_to_insert)} SOFR curve rows.")
 
 
@@ -69,7 +69,7 @@ def load_fed_funds():
     df.index.name = "date"
     df = df.reset_index()
     df.columns = ["date", "rate"]
-    df.to_sql("fed_funds", engine, if_exists="append", index=False)
+    df.to_sql("fed_funds", engine, if_exists="replace", index=False)
     print(f"Loaded {len(df)} Fed Funds rows.")
 
 
@@ -86,7 +86,7 @@ def load_macro_events():
         all_rows.append(df)
 
     final_df = pd.concat(all_rows, ignore_index=True)
-    final_df.to_sql("macro_events", engine, if_exists="append", index=False)
+    final_df.to_sql("macro_events", engine, if_exists="replace", index=False)
     print(f"Loaded {len(final_df)} macro event rows.")
 
 
