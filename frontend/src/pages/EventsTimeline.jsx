@@ -112,7 +112,6 @@ export default function EventsTimeline() {
                   const meta = INDICATOR_META[ev.indicator] || { color: '#999', label: ev.indicator };
                   const change = ev.mom_change;
                   const isUp   = change > 0;
-                  const isDown = change < 0;
                   const isNeutral = change === 0 || change === null;
 
                   return (
