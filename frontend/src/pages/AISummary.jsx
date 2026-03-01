@@ -36,12 +36,13 @@ export default function AISummary() {
     setError(null);
     setResult(null);
     try {
-      const res = await axios.get('http://127.0.0.1:8000/api/ai-summary', {
+      const res = await axios.get(`${process.env.REACT_APP_API_URL || 'http://127.0.0.1:8000/api'}/ai-summary`, {
         params: { indicator, date: selectedDate }
       });
       setResult(res.data);
     } catch (e) {
-      setError('Failed to generate summary. Check your OpenAI API key or try a different event.');
+      console.error('AI Summary error:', e);
+      setError(`Failed to generate summary: ${e.response?.data?.detail || e.message}`);
     }
     setLoading(false);
   };
