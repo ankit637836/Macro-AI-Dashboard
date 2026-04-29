@@ -180,11 +180,11 @@ npm start
 
 ## Author
 
-**Ankit Yadav**  
+**Ankit**  
 B.Tech Mathematics & Computing — IIT Ropar  
 Analyst, Futures First Bangalore — Trading SOFR & Fed Funds futures (SR3, ZQ)
 
-[GitHub](https://github.com/ankit637836) · [LinkedIn](https://linkedin.com/in/ankit6378yadav)
+[GitHub](https://github.com/ankit637836) · [LinkedIn](https://www.linkedin.com/in/ankit-80062b1b9/)
 
 ---
 
