@@ -1,20 +1,24 @@
 import React, { useState } from 'react';
-import { BarChart2, TrendingUp, Calendar, Zap, Brain, Home } from 'lucide-react';
+import { BarChart2, TrendingUp, Calendar, Zap, Brain, Home, Globe, Layers } from 'lucide-react';
 import Hero from './pages/Hero';
 import SofrCurve from './pages/SofrCurve';
 import EventsTimeline from './pages/EventsTimeline';
 import EventImpact from './pages/EventImpact';
 import ContractAnalysis from './pages/ContractAnalysis';
 import AISummary from './pages/AISummary';
+import CrossMarket from './pages/CrossMarket';
+import ContractBuilder from './pages/ContractBuilder';
 import './App.css';
 
 const NAV = [
-  { id: 'hero',      label: 'Overview',         icon: Home },
-  { id: 'curve',     label: 'SOFR Curve',        icon: TrendingUp },
-  { id: 'events',    label: 'Macro Events',      icon: Calendar },
-  { id: 'impact',    label: 'Event Impact',      icon: Zap },
-  { id: 'contracts', label: 'Contract Analysis', icon: BarChart2 },
-  { id: 'ai',        label: 'AI Insight',        icon: Brain },
+  { id: 'hero',            label: 'Overview',          icon: Home },
+  { id: 'curve',           label: 'SOFR Curve',         icon: TrendingUp },
+  { id: 'events',          label: 'Macro Events',       icon: Calendar },
+  { id: 'impact',          label: 'Event Impact',       icon: Zap },
+  { id: 'cross-market',    label: 'Cross Market',       icon: Globe },
+  { id: 'contract-builder',label: 'Contract Builder',   icon: Layers },
+  { id: 'contracts',       label: 'Contract Analysis',  icon: BarChart2 },
+  { id: 'ai',              label: 'AI Insight',         icon: Brain },
 ];
 
 export default function App() {
@@ -22,13 +26,15 @@ export default function App() {
 
   const renderPage = () => {
     switch (page) {
-      case 'hero':      return <Hero onNavigate={setPage} />;
-      case 'curve':     return <SofrCurve />;
-      case 'events':    return <EventsTimeline onSelectEvent={(ind, date) => { setPage('impact'); }} />;
-      case 'impact':    return <EventImpact />;
-      case 'contracts': return <ContractAnalysis />;
-      case 'ai':        return <AISummary />;
-      default:          return <Hero onNavigate={setPage} />;
+      case 'hero':             return <Hero onNavigate={setPage} />;
+      case 'curve':            return <SofrCurve />;
+      case 'events':           return <EventsTimeline />;
+      case 'impact':           return <EventImpact />;
+      case 'cross-market':     return <CrossMarket />;
+      case 'contract-builder': return <ContractBuilder />;
+      case 'contracts':        return <ContractAnalysis />;
+      case 'ai':               return <AISummary />;
+      default:                 return <Hero onNavigate={setPage} />;
     }
   };
 

@@ -7,6 +7,8 @@ from sqlalchemy import create_engine, text
 from dotenv import load_dotenv
 from data.fetch_futures import fetch_sofr_curve, fetch_fed_funds_rate
 from data.fetch_events import fetch_macro_events, compute_mom_change
+from data.fetch_yahoo import fetch_all_markets
+from data.fetch_fomc import fetch_fomc_decisions, fetch_sonia
 
 load_dotenv()
 
@@ -40,6 +42,34 @@ def create_tables():
                 mom_change REAL,
                 pct_change REAL,
                 UNIQUE(date, indicator)
+            )
+        """))
+        conn.execute(text("""
+            CREATE TABLE IF NOT EXISTS market_prices (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                date TEXT NOT NULL,
+                market TEXT NOT NULL,
+                price REAL,
+                pct_change REAL,
+                UNIQUE(date, market)
+            )
+        """))
+        conn.execute(text("""
+            CREATE TABLE IF NOT EXISTS fomc_events (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                date TEXT NOT NULL UNIQUE,
+                rate REAL,
+                prev_rate REAL,
+                change_bps REAL,
+                decision TEXT
+            )
+        """))
+        conn.execute(text("""
+            CREATE TABLE IF NOT EXISTS sonia_rates (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                date TEXT NOT NULL UNIQUE,
+                rate REAL,
+                pct_change REAL
             )
         """))
         conn.commit()
@@ -84,19 +114,62 @@ def load_macro_events():
         df = df.reset_index()
         df = df[["date", "indicator", "value", "mom_change", "pct_change"]]
         all_rows.append(df)
-
     final_df = pd.concat(all_rows, ignore_index=True)
     final_df.to_sql("macro_events", engine, if_exists="replace", index=False)
     print(f"Loaded {len(final_df)} macro event rows.")
 
 
+def load_market_prices():
+    all_markets = fetch_all_markets()
+    all_rows = []
+    for market_key, df in all_markets.items():
+        df = df.reset_index()
+        df["date"] = df["date"].astype(str)
+        df = df[["date", "market", "price", "pct_change"]].dropna(subset=["price"])
+        all_rows.append(df)
+    final_df = pd.concat(all_rows, ignore_index=True)
+    final_df.to_sql("market_prices", engine, if_exists="replace", index=False)
+    print(f"Loaded {len(final_df)} market price rows.")
+
+
+def load_fomc_events():
+    df = fetch_fomc_decisions()
+    df = df.reset_index()
+    df["date"] = df["date"].astype(str)
+    df = df[["date", "rate", "prev_rate", "change_bps", "decision"]]
+    df.to_sql("fomc_events", engine, if_exists="replace", index=False)
+    print(f"Loaded {len(df)} FOMC decision rows.")
+
+
+def load_sonia():
+    df = fetch_sonia()
+    df = df.reset_index()
+    df["date"] = df["date"].astype(str)
+    df = df[["date", "rate", "pct_change"]].dropna(subset=["rate"])
+    df.to_sql("sonia_rates", engine, if_exists="replace", index=False)
+    print(f"Loaded {len(df)} SONIA rows.")
+
+
 if __name__ == "__main__":
     print("Creating tables...")
     create_tables()
+
     print("\nLoading SOFR curve data...")
     load_sofr_curve()
+
     print("\nLoading Fed Funds data...")
     load_fed_funds()
+
     print("\nLoading macro events...")
     load_macro_events()
+
+    print("\nLoading market prices (Yahoo Finance)...")
+    load_market_prices()
+
+    print("\nLoading FOMC decisions...")
+    load_fomc_events()
+
+    print("\nLoading SONIA rates...")
+    load_sonia()
+
     print("\nAll data loaded successfully!")
