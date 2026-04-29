@@ -270,22 +270,30 @@ Write in a professional but clear style. Use basis points (bps) when referencing
 
 @router.get("/admin/load-data")
 def load_data_endpoint():
-    """
-    One-time endpoint to load all data into the database.
-    Call this once after deployment to populate the database.
-    """
-    import sys
-    import os
+    import sys, os
     sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-    
     from data.load_to_db import create_tables, load_sofr_curve, load_fed_funds, load_macro_events
-    
     try:
         create_tables()
         load_sofr_curve()
         load_fed_funds()
         load_macro_events()
-        return {"status": "success", "message": "All data loaded successfully"}
+        return {"status": "success", "message": "Core data loaded successfully"}
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
+
+
+@router.get("/admin/load-markets")
+def load_markets_endpoint():
+    import sys, os
+    sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    from data.load_to_db import create_tables, load_market_prices, load_fomc_events, load_sonia
+    try:
+        create_tables()
+        load_market_prices()
+        load_fomc_events()
+        load_sonia()
+        return {"status": "success", "message": "Market data loaded successfully"}
     except Exception as e:
         return {"status": "error", "message": str(e)}
 
